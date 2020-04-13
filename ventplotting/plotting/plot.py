@@ -63,6 +63,11 @@ def plot_timeseries(
         set_y_axis_label(ax, ylabel, units=units)
 
 
+def fill_timeseries(times, series, ax, **kwargs):
+    """Fill the area under a timeseries."""
+    ax.fill_between(times, series, series * 0, **kwargs)
+
+
 # LEGENDS
 
 
@@ -147,20 +152,27 @@ def set_y_axis_label(ax, name, units=None):
         ax.set_ylabel('{} ({})'.format(name, units))
 
 
-def set_x_axis(ax, xlabel='Time (s)', tick_spacing=1.0, tight=True, log=False):
+def set_x_axis(
+    ax, xlabel='Time (s)', major_tick_spacing=2.0, minor_tick_spacing=1,
+    tight=True, log=False
+):
     """Configure the time axis."""
     if log:
-        major = ticker.LogLocator(base=10, subs=range(tick_spacing))
+        major = ticker.LogLocator(base=10, subs=range(major_tick_spacing))
         ax.xaxis.set_major_locator(major)
     else:
-        major = ticker.MultipleLocator(base=tick_spacing)
+        major = ticker.MultipleLocator(base=major_tick_spacing)
         ax.xaxis.set_major_locator(major)
+        minor = ticker.MultipleLocator(base=minor_tick_spacing)
+        ax.xaxis.set_minor_locator(minor)
     ax.set_xlabel(xlabel)
     ax.autoscale(enable=True, axis='x', tight=tight)
 
 
-def set_x_axes(plot_axes, **kwargs):
+def set_x_axes(plot_axes, grid='both', **kwargs):
     """Configure the time axes."""
+    for ax in plot_axes:
+        ax.xaxis.grid(True, which=grid)
     set_x_axis(plot_axes[-1], **kwargs)
 
 
@@ -207,7 +219,8 @@ def use_helvetica():
         'axes',
         titleweight='medium',
         labelweight='medium',
-        titlepad=12
+        titlepad=12,
+        facecolor='white'
     )
     mpl.rc(
         'figure',

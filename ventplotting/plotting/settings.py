@@ -16,24 +16,29 @@ def make_fig_with_legends(num_rows=3, **kwargs):
 
 
 def plot_settings(
-        raw_signal_set, ax_pressure, ax_flow, ax_volume,
+        raw_signal_set, ax_volume, ax_time, ax_rate,
         start_time=None, end_time=None
 ):
     """Plot all control settings from a RawSignalSet.
 
     Plot each setting on its own axis.
     """
-    df = raw_signal_set.df
     sliced = timeseries.slice_interval(
         raw_signal_set.df, start_time=start_time, end_time=end_time
     )
-    sliced.plot(x='Time', y=df[['Vt']].columns, ax=ax_pressure, legend=False)
-    sliced.plot(x='Time', y=df[['Ti']].columns, ax=ax_flow, legend=False)
-    sliced.plot(x='Time', y=df[['RR']].columns, ax=ax_volume, legend=False)
+    sliced.plot(x='Time', y='Vt', ax=ax_volume, legend=False)
+    plot.fill_timeseries(sliced.Time, sliced.Vt, ax_volume)
+    sliced.plot(x='Time', y='Ti', ax=ax_time, legend=False)
+    plot.fill_timeseries(sliced.Time, sliced.Ti, ax_time)
+    sliced.plot(x='Time', y='RR', ax=ax_rate, legend=False)
+    plot.fill_timeseries(sliced.Time, sliced.RR, ax_rate)
 
-    plot.set_y_axis_label(ax_pressure, 'Volume', units='mL')
-    plot.set_y_axis_label(ax_flow, 'Time', units='s')
-    plot.set_y_axis_label(ax_volume, 'Rate', units='/min')
+    plot.set_y_axis_label(ax_volume, 'Volume', units='mL')
+    plot.limit_y_axes([ax_volume], min=0, max=500)
+    plot.set_y_axis_label(ax_time, 'Time', units='s')
+    plot.limit_y_axes([ax_time], min=0, max=1.5)
+    plot.set_y_axis_label(ax_rate, 'Rate', units='/min')
+    plot.limit_y_axes([ax_rate], min=0, max=35)
 
 
 # STANDARD FIGURES

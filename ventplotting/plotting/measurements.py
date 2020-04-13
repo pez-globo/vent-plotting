@@ -16,29 +16,39 @@ def make_fig_with_legends(num_rows=3, **kwargs):
 
 
 def plot_measurements(
-        raw_signal_set, ax_pressure, ax_flow, ax_volume,
-        start_time=None, end_time=None
+    raw_signal_set, ax_pressure, ax_flow, ax_volume,
+    start_time=None, end_time=None,
+    pressure_min=0, pressure_max=45,
+    flow_min=-200, flow_max=200,
+    volume_min=0, volume_max=450
 ):
     """Plot all measurements from a RawSignalSet.
 
     Plot each measurement on its own axis.
     """
-    df = raw_signal_set.df
     sliced = timeseries.slice_interval(
         raw_signal_set.df, start_time=start_time, end_time=end_time
     )
-    sliced.plot(x='Time', y=df[['Paw']].columns, ax=ax_pressure, legend=False)
-    sliced.plot(x='Time', y=df[['Flow']].columns, ax=ax_flow, legend=False)
-    sliced.plot(x='Time', y=df[['Volume']].columns, ax=ax_volume, legend=False)
+
+    sliced.plot(x='Time', y='Paw', ax=ax_pressure, legend=False, color='#66c2a5')
+    plot.fill_timeseries(sliced.Time, sliced.Paw, ax_pressure, color='#66c2a5')
+    sliced.plot(x='Time', y='Flow', ax=ax_flow, legend=False, color='#fc8d62')
+    plot.fill_timeseries(sliced.Time, sliced.Flow, ax_flow, color='#fc8d62')
+    sliced.plot(x='Time', y='Volume', ax=ax_volume, legend=False, color='#8da0cb')
+    plot.fill_timeseries(sliced.Time, sliced.Volume, ax_volume, color='#8da0cb')
 
     plot.set_y_axis_label(ax_pressure, 'Pressure', units='cmH2O')
     plot.set_y_axis_label(ax_flow, 'Flow', units='L/min')
     plot.set_y_axis_label(ax_volume, 'Volume', units='mL')
 
-    plot.limit_y_axes([ax_pressure], min=0, max=45)
-    flow_y_lim = max(abs(df.Flow.min()), abs(df.Flow.max()))
-    plot.limit_y_axes([ax_flow], min=-flow_y_lim, max=flow_y_lim)
-    plot.limit_y_axes([ax_volume], min=0, max=500)
+    plot.limit_y_axes([ax_pressure], min=pressure_min, max=pressure_max)
+    if flow_min is not None and flow_max is not None:
+        plot.limit_y_axes([ax_flow], min=flow_min, max=flow_max)
+    else:  # make flow limits symmetric
+        df = raw_signal_set.df
+        flow_y_lim = max(abs(df.Flow.min()), abs(df.Flow.max()))
+        plot.limit_y_axes([ax_flow], min=-flow_y_lim, max=flow_y_lim)
+    plot.limit_y_axes([ax_volume], min=volume_min, max=volume_max)
 
 
 # STANDARD FIGURES
