@@ -35,6 +35,11 @@ def plot_measurements(
     plot.set_y_axis_label(ax_flow, 'Flow', units='L/min')
     plot.set_y_axis_label(ax_volume, 'Volume', units='mL')
 
+    plot.limit_y_axes([ax_pressure], min=0, max=45)
+    flow_y_lim = max(abs(df.Flow.min()), abs(df.Flow.max()))
+    plot.limit_y_axes([ax_flow], min=-flow_y_lim, max=flow_y_lim)
+    plot.limit_y_axes([ax_volume], min=0, max=500)
+
 
 # STANDARD FIGURES
 

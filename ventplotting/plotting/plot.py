@@ -170,6 +170,12 @@ def limit_x_axes(plot_axes, min=None, max=None):
         ax.set_xlim(left=min, right=max)
 
 
+def limit_y_axes(plot_axes, min=None, max=None):
+    """Limit the y axes to the specified range."""
+    for ax in plot_axes:
+        ax.set_ylim(bottom=min, top=max)
+
+
 def set_loglog(plot_axes):
     """Set axes to be loglog scale."""
     for ax in plot_axes:
