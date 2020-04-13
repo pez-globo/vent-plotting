@@ -1,0 +1,9 @@
+ipython
+ipykernel
+jupyterlab
+papermill
+ipywidgets
+nteract-scrapbook
+joblib
+jupyter-client
+nbformat
