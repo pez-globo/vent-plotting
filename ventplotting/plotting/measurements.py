@@ -33,12 +33,12 @@ def plot_measurements(
         raw_signal_set.df, start_time=start_time, end_time=end_time
     )
 
-    sliced.plot(x='Time', y='Paw', ax=ax_pressure, legend=False, color='#66c2a5')
-    plot.fill_timeseries(sliced.Time, sliced.Paw, ax_pressure, color='#66c2a5')
-    sliced.plot(x='Time', y='Flow', ax=ax_flow, legend=False, color='#fc8d62')
-    plot.fill_timeseries(sliced.Time, sliced.Flow, ax_flow, color='#fc8d62')
-    sliced.plot(x='Time', y='Volume', ax=ax_volume, legend=False, color='#8da0cb')
-    plot.fill_timeseries(sliced.Time, sliced.Volume, ax_volume, color='#8da0cb')
+    sliced.plot(x='Time', y='Paw', ax=ax_pressure, legend=False, color='#8da0cb')
+    plot.fill_timeseries(sliced.Time, sliced.Paw, ax_pressure, color='#8da0cb')
+    sliced.plot(x='Time', y='Flow', ax=ax_flow, legend=False, color='#66c2a5')
+    plot.fill_timeseries(sliced.Time, sliced.Flow, ax_flow, color='#66c2a5')
+    sliced.plot(x='Time', y='Volume', ax=ax_volume, legend=False, color='#fc8d62')
+    plot.fill_timeseries(sliced.Time, sliced.Volume, ax_volume, color='#fc8d62')
 
     plot.set_y_axis_label(ax_pressure, 'Pressure', units='cmH2O')
     plot.set_y_axis_label(ax_flow, 'Flow', units='L/min')
