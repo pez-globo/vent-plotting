@@ -19,8 +19,11 @@ def plot_measurements(
     raw_signal_set, ax_pressure, ax_flow, ax_volume,
     start_time=None, end_time=None,
     pressure_min=0, pressure_max=45,
-    flow_min=-200, flow_max=200,
-    volume_min=0, volume_max=450
+    pressure_major_spacing=20, pressure_minor_spacing=10,
+    flow_min=-80, flow_max=80,
+    flow_major_spacing=60, flow_minor_spacing=30,
+    volume_min=0, volume_max=550,
+    volume_major_spacing=200, volume_minor_spacing=100
 ):
     """Plot all measurements from a RawSignalSet.
 
@@ -50,6 +53,19 @@ def plot_measurements(
         plot.limit_y_axes([ax_flow], min=-flow_y_lim, max=flow_y_lim)
     plot.limit_y_axes([ax_volume], min=volume_min, max=volume_max)
 
+    plot.set_y_axis(
+        ax_pressure, major_tick_spacing=pressure_major_spacing,
+        minor_tick_spacing=pressure_minor_spacing
+    )
+    plot.set_y_axis(
+        ax_flow, major_tick_spacing=flow_major_spacing,
+        minor_tick_spacing=flow_minor_spacing
+    )
+    plot.set_y_axis(
+        ax_volume, major_tick_spacing=volume_major_spacing,
+        minor_tick_spacing=volume_minor_spacing
+    )
+
 
 # STANDARD FIGURES
 
@@ -57,7 +73,10 @@ def make_measurements_fig(
         analysis, fig_title, column_title='Raw Measurements',
         fig_maker=make_fig_with_legends,
         kwargs_make_fig={'num_cols': 1}, kwargs_plot_measurements={},
-        kwargs_polish_axes={}
+        kwargs_polish_axes={
+            'kwargs_set_x_axes': {'kwargs_grid': {'alpha': 0.5}},
+            'kwargs_set_y_axes': {'kwargs_grid': {'alpha': 0.5}}
+        }
 ):
     """Make a figure with measurements from an analysis."""
     kwargs_make_fig = {**kwargs_make_fig, 'num_cols': 1}

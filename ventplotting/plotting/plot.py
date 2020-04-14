@@ -153,7 +153,7 @@ def set_y_axis_label(ax, name, units=None):
 
 
 def set_x_axis(
-    ax, xlabel='Time (s)', major_tick_spacing=2.0, minor_tick_spacing=1,
+    ax, xlabel='Time (s)', major_tick_spacing=2.0, minor_tick_spacing=0.5,
     tight=True, log=False
 ):
     """Configure the time axis."""
@@ -169,10 +169,10 @@ def set_x_axis(
     ax.autoscale(enable=True, axis='x', tight=tight)
 
 
-def set_x_axes(plot_axes, grid='both', **kwargs):
+def set_x_axes(plot_axes, grid='both', kwargs_grid={}, **kwargs):
     """Configure the time axes."""
     for ax in plot_axes:
-        ax.xaxis.grid(True, which=grid)
+        ax.xaxis.grid(True, which=grid, **kwargs_grid)
     set_x_axis(plot_axes[-1], **kwargs)
 
 
@@ -180,6 +180,24 @@ def limit_x_axes(plot_axes, min=None, max=None):
     """Limit the time axes to the specified interval."""
     for ax in plot_axes:
         ax.set_xlim(left=min, right=max)
+
+
+def set_y_axis(ax, major_tick_spacing=2.0, minor_tick_spacing=0.5, log=False):
+    """Configure the y axis."""
+    if log:
+        major = ticker.LogLocator(base=10, subs=range(major_tick_spacing))
+        ax.yaxis.set_major_locator(major)
+    else:
+        major = ticker.MultipleLocator(base=major_tick_spacing)
+        ax.yaxis.set_major_locator(major)
+        minor = ticker.MultipleLocator(base=minor_tick_spacing)
+        ax.yaxis.set_minor_locator(minor)
+
+
+def set_y_axes(plot_axes, grid='both', kwargs_grid={}):
+    """Configure the time axes."""
+    for ax in plot_axes:
+        ax.yaxis.grid(True, which=grid, **kwargs_grid)
 
 
 def limit_y_axes(plot_axes, min=None, max=None):
@@ -198,11 +216,13 @@ def set_loglog(plot_axes):
 
 def polish_axes(
         plot_axes, legend_axes,
-        kwargs_align_labels={}, kwargs_set_x_axes={}, kwargs_add_legends={}
+        kwargs_align_labels={}, kwargs_set_x_axes={}, kwargs_set_y_axes={},
+        kwargs_add_legends={}
 ):
     """Improve layout and display of axes."""
     align_labels(plot_axes, **kwargs_align_labels)
     set_x_axes(plot_axes, **kwargs_set_x_axes)
+    set_y_axes(plot_axes, **kwargs_set_y_axes)
     add_legends(plot_axes, legend_axes, **kwargs_add_legends)
 
 
