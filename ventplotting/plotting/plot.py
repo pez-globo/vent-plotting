@@ -26,11 +26,14 @@ def make_fig(num_rows=1, num_cols=1, figsize=None, sharex='all', sharey='row'):
     )
     axes = axes.T
     if len(axes) == 1:
-        return axes[0]
-    if num_cols == 1:
-        return (fig, axes)
-    else:
-        return (fig, *axes)
+        axes = axes[0]
+    return (fig, axes, [])
+    # if len(axes) == 1:
+    #     return axes
+    # if num_cols == 1:
+    #     return (fig, axes)
+    # else:
+    #     return (fig, *axes)
 
 
 def add_axes_title(axes, title):
@@ -138,7 +141,7 @@ def add_legends(plot_axes, legend_axes, **kwargs):
 # AXES
 
 
-def align_labels(plot_axes, position=-0.09):
+def align_labels(plot_axes, position=-0.06):
     """Align axis labels between plot axes of a figure."""
     for ax in plot_axes:
         ax.yaxis.set_label_coords(position, 0.5)
@@ -153,7 +156,7 @@ def set_y_axis_label(ax, name, units=None):
 
 
 def set_x_axis(
-    ax, xlabel='Time (s)', major_tick_spacing=2.0, minor_tick_spacing=0.5,
+    ax, xlabel='Time (s)', major_tick_spacing=1.0, minor_tick_spacing=0.5,
     tight=True, log=False
 ):
     """Configure the time axis."""
@@ -169,10 +172,11 @@ def set_x_axis(
     ax.autoscale(enable=True, axis='x', tight=tight)
 
 
-def set_x_axes(plot_axes, grid='both', kwargs_grid={}, **kwargs):
+def set_x_axes(plot_axes, tight=True, grid='both', kwargs_grid={}, **kwargs):
     """Configure the time axes."""
     for ax in plot_axes:
         ax.xaxis.grid(True, which=grid, **kwargs_grid)
+        ax.autoscale(enable=True, axis='x', tight=tight)
     set_x_axis(plot_axes[-1], **kwargs)
 
 
@@ -182,7 +186,7 @@ def limit_x_axes(plot_axes, min=None, max=None):
         ax.set_xlim(left=min, right=max)
 
 
-def set_y_axis(ax, major_tick_spacing=2.0, minor_tick_spacing=0.5, log=False):
+def set_y_axis(ax, major_tick_spacing=10.0, minor_tick_spacing=5.0, log=False):
     """Configure the y axis."""
     if log:
         major = ticker.LogLocator(base=10, subs=range(major_tick_spacing))

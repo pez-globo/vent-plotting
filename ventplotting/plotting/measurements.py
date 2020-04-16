@@ -17,7 +17,7 @@ def make_fig_with_legends(num_rows=3, **kwargs):
 
 def plot_measurements(
     raw_signal_set, ax_pressure, ax_flow, ax_volume,
-    start_time=None, end_time=None,
+    start_time=None, end_time=None, realign_time=False,
     pressure_min=0, pressure_max=45,
     pressure_major_spacing=20, pressure_minor_spacing=10,
     flow_min=-80, flow_max=80,
@@ -32,6 +32,10 @@ def plot_measurements(
     sliced = timeseries.slice_interval(
         raw_signal_set.df, start_time=start_time, end_time=end_time
     )
+
+    if realign_time:
+        sliced = sliced.copy()
+        sliced.Time = sliced.Time - sliced.Time.min()
 
     sliced.plot(x='Time', y='Paw', ax=ax_pressure, legend=False, color='#8da0cb')
     plot.fill_timeseries(sliced.Time, sliced.Paw, ax_pressure, color='#8da0cb')
@@ -81,8 +85,9 @@ def make_measurements_fig(
     """Make a figure with measurements from an analysis."""
     kwargs_make_fig = {**kwargs_make_fig, 'num_cols': 1}
     (fig, plot_axes, legend_axes) = fig_maker(**kwargs_make_fig)
-    plot.add_fig_title(fig, fig_title)
-    plot.add_axes_title(plot_axes, column_title)
+    if fig_maker == make_fig_with_legends:
+        plot.add_fig_title(fig, fig_title)
+        plot.add_axes_title(plot_axes, column_title)
     plot_measurements(analysis.raw_signals, *plot_axes, **kwargs_plot_measurements)
     plot.polish_axes(plot_axes, legend_axes, **kwargs_polish_axes)
     return (fig, plot_axes, legend_axes)
