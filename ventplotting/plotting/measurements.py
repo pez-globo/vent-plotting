@@ -23,7 +23,8 @@ def plot_measurements(
     flow_min=-80, flow_max=80,
     flow_major_spacing=60, flow_minor_spacing=30,
     volume_min=0, volume_max=550,
-    volume_major_spacing=200, volume_minor_spacing=100
+    volume_major_spacing=200, volume_minor_spacing=100,
+    plot_kwargs={}
 ):
     """Plot all measurements from a RawSignalSet.
 
@@ -37,12 +38,12 @@ def plot_measurements(
         sliced = sliced.copy()
         sliced.Time = sliced.Time - sliced.Time.min()
 
-    sliced.plot(x='Time', y='Paw', ax=ax_pressure, legend=False, color='#8da0cb')
-    plot.fill_timeseries(sliced.Time, sliced.Paw, ax_pressure, color='#8da0cb')
-    sliced.plot(x='Time', y='Flow', ax=ax_flow, legend=False, color='#66c2a5')
-    plot.fill_timeseries(sliced.Time, sliced.Flow, ax_flow, color='#66c2a5')
-    sliced.plot(x='Time', y='Volume', ax=ax_volume, legend=False, color='#fc8d62')
-    plot.fill_timeseries(sliced.Time, sliced.Volume, ax_volume, color='#fc8d62')
+    sliced.plot(x='Time', y='Paw', ax=ax_pressure, legend=False, color='#8da0cb', **plot_kwargs)
+    plot.fill_timeseries(sliced.Time, sliced.Paw, ax_pressure, color='#8da0cb', alpha=0.5)
+    sliced.plot(x='Time', y='Flow', ax=ax_flow, legend=False, color='#66c2a5', **plot_kwargs)
+    plot.fill_timeseries(sliced.Time, sliced.Flow, ax_flow, color='#66c2a5', alpha=0.5)
+    sliced.plot(x='Time', y='Volume', ax=ax_volume, legend=False, color='#fc8d62', **plot_kwargs)
+    plot.fill_timeseries(sliced.Time, sliced.Volume, ax_volume, color='#fc8d62', alpha=0.5)
 
     plot.set_y_axis_label(ax_pressure, 'Pressure', units='cmH2O')
     plot.set_y_axis_label(ax_flow, 'Flow', units='L/min')
