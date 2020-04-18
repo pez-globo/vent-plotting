@@ -39,11 +39,11 @@ def plot_measurements(
         sliced.Time = sliced.Time - sliced.Time.min()
 
     sliced.plot(x='Time', y='Paw', ax=ax_pressure, legend=False, color='#8da0cb', **plot_kwargs)
-    plot.fill_timeseries(sliced.Time, sliced.Paw, ax_pressure, color='#8da0cb', alpha=0.5)
+    plot.fill_timeseries(sliced.Time, sliced.Paw, ax_pressure, color='#8da0cb')
     sliced.plot(x='Time', y='Flow', ax=ax_flow, legend=False, color='#66c2a5', **plot_kwargs)
-    plot.fill_timeseries(sliced.Time, sliced.Flow, ax_flow, color='#66c2a5', alpha=0.5)
+    plot.fill_timeseries(sliced.Time, sliced.Flow, ax_flow, color='#66c2a5')
     sliced.plot(x='Time', y='Volume', ax=ax_volume, legend=False, color='#fc8d62', **plot_kwargs)
-    plot.fill_timeseries(sliced.Time, sliced.Volume, ax_volume, color='#fc8d62', alpha=0.5)
+    plot.fill_timeseries(sliced.Time, sliced.Volume, ax_volume, color='#fc8d62')
 
     plot.set_y_axis_label(ax_pressure, 'Pressure', units='cmH2O')
     plot.set_y_axis_label(ax_flow, 'Flow', units='L/min')
